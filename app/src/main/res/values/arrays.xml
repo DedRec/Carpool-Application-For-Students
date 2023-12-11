@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="time_options">
+        <item>7:30 AM</item>
+        <item>5:30 PM</item>
+    </string-array>
+</resources>

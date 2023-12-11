@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="textViewOrderIdLabel" type="id" />
+    <item name="textViewOrderId" type="id" />
+    <item name="textViewOrderDateLabel" type="id" />
+    <item name="textViewOrderDate" type="id" />
+    <item name="textViewSourceLabel" type="id" />
+    <item name="textViewSource" type="id" />
+    <item name="textViewDestinationLabel" type="id" />
+    <item name="textViewDestination" type="id" />
+    <item name="textViewOrderPriceLabel" type="id" />
+    <item name="textViewOrderPrice" type="id" />
+    <item name="textViewOrderTimeLabel" type="id" />
+    <item name="textViewOrderTime" type="id" />
+    <item name="textViewDriverNameLabel" type="id" />
+    <item name="textViewDriverName" type="id" />
+    <item name="textViewCarPlateLabel" type="id" />
+    <item name="textViewCarPlate" type="id" />
+    <item name="textViewOrderStateLabel" type="id" />
+    <item name="textViewOrderState" type="id" />
+</resources>
