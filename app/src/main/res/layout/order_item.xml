@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardCornerRadius="4dp"
+    android:layout_marginVertical="5dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/textViewOrderIdLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Order ID:"
+            android:textSize="16sp"
+            android:textColor="@android:color/black"/>
+
+        <TextView
+            android:id="@+id/textViewOrderId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ABC123"
+            android:textSize="16sp"
+            android:textColor="@android:color/black"
+            android:layout_marginStart="8dp"
+            android:layout_toEndOf="@id/textViewOrderIdLabel"/>
+
+        <TextView
+            android:id="@+id/textViewOrderDateLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Order Date:"
+            android:textSize="16sp"
+            android:textColor="@android:color/black"
+            android:layout_below="@id/textViewOrderIdLabel"
+            android:layout_marginTop="8dp"/>
+
+        <TextView
+            android:id="@+id/textViewOrderDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="January 1, 2023"
+            android:textSize="16sp"
+            android:textColor="@android:color/black"
+            android:layout_marginStart="8dp"
+            android:layout_toEndOf="@id/textViewOrderDateLabel"
+            android:layout_below="@id/textViewOrderId"
+            android:layout_marginTop="8dp"/>
+
+        <TextView
+            android:id="@+id/textViewSourceLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Source:"
+            android:textSize="16sp"
+            android:textColor="@android:color/black"
+            android:layout_below="@id/textViewOrderDateLabel"
+            android:layout_marginTop="8dp"/>
+
+        <TextView
+            android:id="@+id/textViewSource"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Your Source"
+            android:textSize="16sp"
+            android:textColor="@android:color/black"
+            android:layout_marginStart="8dp"
+            android:layout_toEndOf="@id/textViewSourceLabel"
+            android:layout_below="@id/textViewOrderDate"
+            android:layout_marginTop="8dp"/>
+
+        <TextView
+            android:id="@+id/textViewDestinationLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Destination:"
+            android:textSize="16sp"
+            android:textColor="@android:color/black"
+            android:layout_below="@id/textViewSourceLabel"
+            android:layout_marginTop="8dp"/>
+
+        <TextView
+            android:id="@+id/textViewDestination"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Your Destination"
+            android:textSize="16sp"
+            android:textColor="@android:color/black"
+            android:layout_marginStart="8dp"
+            android:layout_toEndOf="@id/textViewDestinationLabel"
+            android:layout_below="@id/textViewSource"
+            android:layout_marginTop="8dp"/>
+
+        <TextView
+            android:id="@+id/textViewOrderPriceLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Order Price:"
+            android:textSize="16sp"
+            android:textColor="@android:color/black"
+            android:layout_below="@id/textViewDestinationLabel"
+            android:layout_marginTop="8dp"/>
+
+        <TextView
+            android:id="@+id/textViewOrderPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="$50.00"
+            android:textSize="16sp"
+            android:textColor="@android:color/black"
+            android:layout_marginStart="8dp"
+            android:layout_toEndOf="@id/textViewOrderPriceLabel"
+            android:layout_below="@id/textViewDestination"
+            android:layout_marginTop="8dp"/>
+
+        <TextView
+            android:id="@+id/textViewOrderTimeLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Order Time:"
+            android:textSize="16sp"
+            android:textColor="@android:color/black"
+            android:layout_below="@id/textViewOrderPriceLabel"
+            android:layout_marginTop="8dp"/>
+
+        <TextView
+            android:id="@+id/textViewOrderTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="7:30 AM"
+            android:textSize="16sp"
+            android:textColor="@android:color/black"
+            android:layout_marginStart="8dp"
+            android:layout_toEndOf="@id/textViewOrderTimeLabel"
+            android:layout_below="@id/textViewOrderPrice"
+            android:layout_marginTop="8dp"/>
+
+        <TextView
+            android:id="@+id/textViewDriverNameLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Driver Name:"
+            android:textSize="16sp"
+            android:textColor="@android:color/black"
+            android:layout_below="@id/textViewOrderTimeLabel"
+            android:layout_marginTop="8dp"/>
+
+        <TextView
+            android:id="@+id/textViewDriverName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="John Doe"
+            android:textSize="16sp"
+            android:textColor="@android:color/black"
+            android:layout_marginStart="8dp"
+            android:layout_toEndOf="@id/textViewDriverNameLabel"
+            android:layout_below="@id/textViewOrderTime"
+            android:layout_marginTop="8dp"/>
+
+        <TextView
+            android:id="@+id/textViewCarPlateLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Car Plate Number:"
+            android:textSize="16sp"
+            android:textColor="@android:color/black"
+            android:layout_below="@id/textViewDriverNameLabel"
+            android:layout_marginTop="8dp"/>
+
+        <TextView
+            android:id="@+id/textViewCarPlate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ABC 123"
+            android:textSize="16sp"
+            android:textColor="@android:color/black"
+            android:layout_marginStart="8dp"
+            android:layout_toEndOf="@id/textViewCarPlateLabel"
+            android:layout_below="@id/textViewDriverName"
+            android:layout_marginTop="8dp"/>
+
+        <TextView
+            android:id="@+id/textViewOrderStateLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/textViewCarPlateLabel"
+            android:layout_marginTop="8dp"
+            android:text="Order State:"
+            android:textColor="@android:color/black"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/textViewOrderState"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="In Progress"
+            android:textSize="16sp"
+            android:textColor="@android:color/black"
+            android:layout_marginStart="8dp"
+            android:layout_toEndOf="@id/textViewOrderStateLabel"
+            android:layout_below="@id/textViewCarPlateLabel"
+            android:layout_marginTop="8dp"/>
+
+    </RelativeLayout>
+
+
+
+</androidx.cardview.widget.CardView>
