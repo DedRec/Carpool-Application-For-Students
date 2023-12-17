@@ -1,12 +1,17 @@
 package com.example.carpool;
 
+import android.icu.text.SimpleDateFormat;
+import android.icu.util.Calendar;
+import android.net.ParseException;
 import android.widget.LinearLayout;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 public class TripItem {
-    String to,from,time,carPlate, driverId, tripid, passengers_number;
-    ArrayList<String> users;
+    String to,from,time,carPlate, driverId, tripid, passengers_number, date, day, dayOfMonth, month, year;
+    ArrayList<String> orders;
     LinearLayout layout;
 
     public TripItem() {
@@ -19,6 +24,64 @@ public class TripItem {
         this.carPlate = carPlate;
     }
 
+    public void parseDate() {
+        try{
+            SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
+
+            Date date = sdf.parse(this.date);
+
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(date);
+
+            this.month = new SimpleDateFormat("MMM", Locale.US).format(date);
+            this.dayOfMonth = String.valueOf(calendar.get(Calendar.DAY_OF_MONTH));
+            this.day = new SimpleDateFormat("EEE", Locale.US).format(date);
+            this.year = String.valueOf(calendar.get(Calendar.YEAR));
+        }catch (java.text.ParseException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public String getDayOfMonth() {
+        return dayOfMonth;
+    }
+
+    public void setDayOfMonth(String dayOfMonth) {
+        this.dayOfMonth = dayOfMonth;
+    }
+
+    public String getDay() {
+        return day;
+    }
+
+    public void setDay(String day) {
+        this.day = day;
+    }
+
+    public String getMonth() {
+        return month;
+    }
+
+    public void setMonth(String month) {
+        this.month = month;
+    }
+
+    public String getYear() {
+        return year;
+    }
+
+    public void setYear(String year) {
+        this.year = year;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
     public String getPassengers_number() {
         return passengers_number;
     }
@@ -27,12 +90,12 @@ public class TripItem {
         this.passengers_number = passengers_number;
     }
 
-    public ArrayList<String> getUsers() {
-        return users;
+    public ArrayList<String> getOrders() {
+        return orders;
     }
 
-    public void setUsers(ArrayList<String> users) {
-        this.users = users;
+    public void setOrders(ArrayList<String> orders) {
+        this.orders = orders;
     }
 
     public String getTripid() {

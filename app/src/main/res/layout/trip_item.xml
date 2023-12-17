@@ -22,8 +22,9 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_weight="1"
-                android:text="5:40"
+                android:layout_weight="2.5"
+                android:gravity="center"
+                android:text="Fri,31Mar\n5:40AM"
                 android:textColor="@color/black"
                 android:textSize="20sp" />
 
@@ -103,6 +104,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/trip_details_layout">
+
             <TextView
                 android:id="@+id/trip_details"
                 android:layout_width="wrap_content"
@@ -110,6 +112,8 @@
                 android:layout_weight="1"
                 android:text="Trip Details"
                 android:textSize="18sp"
+
+                android:textStyle="bold"
                 android:visibility="gone" />
         </LinearLayout>
     </LinearLayout>

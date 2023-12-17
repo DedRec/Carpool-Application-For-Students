@@ -27,7 +27,7 @@ public class PaymentActivity extends AppCompatActivity {
     TextView driverNameT, timeT, sourceT, destinationT, carPlateT;
     Button paymentBtn;
     RadioGroup radioGroup;
-    int lastId = 0;
+    ArrayList<String> orders;
     String orderid,driverName;
     private String driverid;
     private HelperTrip trip;
@@ -75,35 +75,38 @@ public class PaymentActivity extends AppCompatActivity {
         });
 
         Query checkTripDatabase = tripReference.orderByChild("tripid").equalTo(intent.getStringExtra("tripid"));
-        checkTripDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+        checkTripDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(snapshot.exists()){
                     trip =  snapshot.child(intent.getStringExtra("tripid")).getValue(HelperTrip.class);
+                    orders = (trip.getOrders() != null) ? trip.getOrders() : new ArrayList<>();
                 }
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
             }
         });
 
-        orderReference.orderByKey().limitToLast(1).addListenerForSingleValueEvent(new ValueEventListener() {
+        orderReference.orderByKey().limitToLast(1).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                int lastId = 0;
 
-                for (DataSnapshot order : snapshot.getChildren()){
+                for (DataSnapshot order : snapshot.getChildren()) {
                     String lastOrderId = order.getKey();
                     lastId = getLastId(lastOrderId);
                 }
+
                 lastId = lastId > 0 ? lastId : 0;
-                orderid = "order"+(++lastId);
+
+                lastId++;
+                orderid = "order" + String.format("%03d", lastId);
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
             }
         });
 
@@ -129,9 +132,11 @@ public class PaymentActivity extends AppCompatActivity {
                 int passengersInt = Integer.parseInt(trip.getPassengers_number());
                 passengersInt-=1;
                 String passengers = Integer.toString(passengersInt);
+                orders.add(orderid);
 
                 HelperOrder order = new HelperOrder(driverid,user.getUid(),intent.getStringExtra("source"),intent.getStringExtra("destination"),intent.getStringExtra("carPlate"),driverName,orderid,intent.getStringExtra("time"));
                 tripReference.child(trip.getTripid()).child("passengers_number").setValue(passengers);
+                tripReference.child(trip.getTripid()).child("orders").setValue(orders);
                 orderReference.child(orderid).setValue(order);
 
                 Intent intent2 = new Intent(PaymentActivity.this, OrderActivity.class);
@@ -140,7 +145,11 @@ public class PaymentActivity extends AppCompatActivity {
             }
         });
     }
-    public int getLastId(String lastOrderId){
-        return Integer.parseInt(lastOrderId.replaceAll("\\D+", ""));
+    private int getLastId(String orderId) {
+        try {
+            return Integer.parseInt(orderId.replace("order", ""));
+        } catch (NumberFormatException e) {
+            return 0;
+        }
     }
 }

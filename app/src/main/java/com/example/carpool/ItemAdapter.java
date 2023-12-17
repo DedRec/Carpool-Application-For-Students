@@ -87,10 +87,11 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
     @Override
     public void onBindViewHolder(@NonNull ItemViewHolder holder, int position) {
         TripItem currentItem = itemList.get(position);
-
+        currentItem.parseDate();
         holder.mTextView1.setText(currentItem.getFrom());
         holder.mTextView2.setText(currentItem.getTo());
-        holder.mTextView3.setText(currentItem.getTime());
+        holder.mTextView3.setText(currentItem.getDay()+","+currentItem.getDayOfMonth()+currentItem.getMonth()+"\n"+currentItem.getTime());
+        holder.tripInfo.setText("Car Plate: "+currentItem.getCarPlate()+" \n"+"Remaining Number of Passengers: "+currentItem.getPassengers_number());
     }
 
     @Override

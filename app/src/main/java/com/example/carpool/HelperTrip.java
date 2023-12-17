@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class HelperTrip {
     String to,from,time,carPlate, driverId, tripid, passengers_number;
-    ArrayList<String> users;
+    ArrayList<String> orders;
 
     public HelperTrip() {
     }
@@ -17,7 +17,7 @@ public class HelperTrip {
         this.driverId = driverId;
         this.tripid = tripid;
         this.passengers_number = passengers_number;
-        this.users = new ArrayList<>();
+        this.orders = new ArrayList<>();
     }
 
     public HelperTrip(String to, String from, String time, String carPlate, String driverId, String tripid) {
@@ -30,14 +30,12 @@ public class HelperTrip {
         this.passengers_number = "3";
     }
 
-
-
-    public ArrayList<String> getUsers() {
-        return users;
+    public ArrayList<String> getOrders() {
+        return orders;
     }
 
-    public void setUsers(ArrayList<String> users) {
-        this.users = users;
+    public void setOrders(ArrayList<String> orders) {
+        this.orders = orders;
     }
 
     public String getPassengers_number() {

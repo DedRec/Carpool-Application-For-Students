@@ -82,7 +82,12 @@ public class SignupActivity extends AppCompatActivity {
                     return;
                 }
 
-                checkUserDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+                if (!email.endsWith("@eng.asu.edu.eg")) {
+                    Toast.makeText(SignupActivity.this, "Invalid email domain. Please use @eng.asu.edu.eg", Toast.LENGTH_LONG).show();
+                    return;
+                }
+
+                checkUserDatabase.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         if(snapshot.exists()){
