@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -22,6 +23,7 @@ public class EditActivity extends AppCompatActivity {
     private FirebaseUser user;
     private DatabaseReference reference;
     Button editBtn,cancelBtn;
+    DatePicker datePicker;
     EditText sourceEditText, destinationEditText, carPlateEditText, passengersText;
     Spinner timeSpinner;
 
@@ -39,6 +41,7 @@ public class EditActivity extends AppCompatActivity {
         destinationEditText = findViewById(R.id.destination_input);
         carPlateEditText = findViewById(R.id.car_plate_input);
         passengersText = findViewById(R.id.passenger_input);
+        datePicker = findViewById(R.id.datePicker);
         editBtn = findViewById(R.id.edit_btn);
         cancelBtn = findViewById(R.id.cancel_btn);
 
@@ -53,6 +56,7 @@ public class EditActivity extends AppCompatActivity {
         carPlateEditText.setText(intent.getStringExtra("carPlate"));
         passengersText.setText(intent.getStringExtra("passengers"));
 
+
         editBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -61,6 +65,11 @@ public class EditActivity extends AppCompatActivity {
                 String destination = String.valueOf(destinationEditText.getText());
                 String carPlate = String.valueOf(carPlateEditText.getText());
                 String passengers = String.valueOf(passengersText.getText());
+                int day = datePicker.getDayOfMonth();
+                int month = datePicker.getMonth() + 1;
+                int year = datePicker.getYear();
+                String selectedDate = String.format("%02d/%02d/%04d", month, day, year);
+
 
                 if(TextUtils.isEmpty(source)){
                     Toast.makeText(getApplicationContext(),"Enter source",Toast.LENGTH_SHORT).show();
@@ -84,8 +93,13 @@ public class EditActivity extends AppCompatActivity {
                 }
                 String tripid = intent.getStringExtra("tripid");
                 DatabaseReference tripReference = reference.child(tripid);
-                HelperTrip helper = new HelperTrip(destination,source,time,carPlate,user.getUid(),tripid,passengers);
-                tripReference.setValue(helper);
+                //HelperTrip helper = new HelperTrip(destination,source,time,carPlate,user.getUid(),tripid,passengers);
+                tripReference.child("to").setValue(destination);
+                tripReference.child("from").setValue(source);
+                tripReference.child("time").setValue(time);
+                tripReference.child("carPlate").setValue(carPlate);
+                tripReference.child("passengers_number").setValue(passengers);
+                tripReference.child("date").setValue(selectedDate);
 
                 Intent intent2 = new Intent(EditActivity.this,MainActivity.class);
                 startActivity(intent2);

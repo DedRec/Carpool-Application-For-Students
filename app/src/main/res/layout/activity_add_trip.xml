@@ -1,85 +1,105 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="20dp"
-    android:layout_weight="20"
-    tools:context=".AddTripActivity">
-    <EditText
-        android:id="@+id/source_input"
+    android:layout_height="match_parent">
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/source"
-        android:inputType="text"
-        android:padding="8dp"
-        android:drawableLeft="@drawable/baseline_trip_origin_24"
-        android:drawablePadding="8dp"
-        android:background="@drawable/blue_border"/>
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="20dp"
+        android:layout_weight="20"
+        tools:context=".AddTripActivity">
+            <EditText
+                android:id="@+id/source_input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/source"
+                android:inputType="text"
+                android:padding="8dp"
+                android:drawableLeft="@drawable/baseline_trip_origin_24"
+                android:drawablePadding="8dp"
+                android:background="@drawable/blue_border"/>
 
-    <EditText
-        android:id="@+id/destination_input"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/destination"
-        android:inputType="text"
-        android:padding="8dp"
-        android:drawableLeft="@drawable/baseline_trip_origin_24"
-        android:drawablePadding="8dp"
-        android:background="@drawable/blue_border"/>
+            <EditText
+                android:id="@+id/destination_input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/destination"
+                android:inputType="text"
+                android:padding="8dp"
+                android:drawableLeft="@drawable/baseline_trip_origin_24"
+                android:drawablePadding="8dp"
+                android:background="@drawable/blue_border"/>
 
-    <TextView
-        android:id="@+id/time_text_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/time"
-        android:textSize="18sp"
-        android:inputType="text"
-        android:padding="8dp"
-        android:drawableLeft="@drawable/baseline_access_time_24"
-        android:drawablePadding="8dp"
-        android:background="@drawable/blue_border"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Select trip date:"
+                android:textSize="20sp"
+                android:textColor="@android:color/black"/>
 
-    <Spinner
-        android:id="@+id/time_spinner"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:layout_centerInParent="true"
-        android:entries="@array/time_options"/>
+            <DatePicker
+                android:id="@+id/datePicker"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:datePickerMode="spinner"
+                android:calendarViewShown="false"/>
 
-    <EditText
-        android:id="@+id/passenger_input"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/passengers_number"
-        android:inputType="text"
-        android:padding="8dp"
-        android:drawableLeft="@drawable/baseline_group_24"
-        android:drawablePadding="8dp"
-        android:background="@drawable/blue_border"/>
+            <TextView
+                android:id="@+id/time_text_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/time"
+                android:textSize="18sp"
+                android:inputType="text"
+                android:padding="8dp"
+                android:drawableLeft="@drawable/baseline_access_time_24"
+                android:drawablePadding="8dp"
+                android:background="@drawable/blue_border"/>
 
-    <EditText
-        android:id="@+id/car_plate_input"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/car_plate"
-        android:inputType="text"
-        android:padding="8dp"
-        android:drawableLeft="@drawable/baseline_directions_car_24"
-        android:drawablePadding="8dp"
-        android:background="@drawable/blue_border"/>
+            <Spinner
+                android:id="@+id/time_spinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:layout_centerInParent="true"
+                android:entries="@array/time_options"/>
 
-    <Button
-        android:id="@+id/add_btn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="@string/add"
-        android:textSize="18sp"
-        android:textColor="#FFFFFF"
-        />
-</LinearLayout>
+            <EditText
+                android:id="@+id/passenger_input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/passengers_number"
+                android:inputType="text"
+                android:padding="8dp"
+                android:drawableLeft="@drawable/baseline_group_24"
+                android:drawablePadding="8dp"
+                android:background="@drawable/blue_border"/>
+
+            <EditText
+                android:id="@+id/car_plate_input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/car_plate"
+                android:inputType="text"
+                android:padding="8dp"
+                android:drawableLeft="@drawable/baseline_directions_car_24"
+                android:drawablePadding="8dp"
+                android:background="@drawable/blue_border"/>
+
+            <Button
+                android:id="@+id/add_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="@string/add"
+                android:textSize="18sp"
+                android:textColor="#FFFFFF"
+                />
+    </LinearLayout>
+</ScrollView>

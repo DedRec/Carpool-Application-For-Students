@@ -6,8 +6,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -21,11 +23,12 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 public class AddTripActivity extends AppCompatActivity {
-    int lastId = 0;
     private FirebaseAuth auth;
     private FirebaseUser user;
     private DatabaseReference reference;
+    String tripid;
     Button addBtn;
+    DatePicker datePicker;
     EditText sourceEditText, destinationEditText, carPlateEditText, passengersText;
     Spinner timeSpinner;
 
@@ -42,17 +45,25 @@ public class AddTripActivity extends AppCompatActivity {
         destinationEditText = findViewById(R.id.destination_input);
         carPlateEditText = findViewById(R.id.car_plate_input);
         passengersText = findViewById(R.id.passenger_input);
+        datePicker = findViewById(R.id.datePicker);
         addBtn = findViewById(R.id.add_btn);
 
-        reference.orderByKey().limitToLast(1).addListenerForSingleValueEvent(new ValueEventListener() {
+        reference.orderByKey().limitToLast(1).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                for (DataSnapshot trip : snapshot.getChildren()){
-                    String lastTripId = trip.getKey();
-                    lastId = Integer.parseInt(lastTripId.replaceAll("\\D+", ""));
+                int lastId = 0;
+
+                for (DataSnapshot order : snapshot.getChildren()) {
+                    String lastOrderId = order.getKey();
+                    lastId = getLastId(lastOrderId);
                 }
+
                 lastId = lastId > 0 ? lastId : 0;
+
+                lastId++;
+                tripid = "trip" + String.format("%03d", lastId);
+
             }
 
             @Override
@@ -69,6 +80,10 @@ public class AddTripActivity extends AppCompatActivity {
                 String destination = String.valueOf(destinationEditText.getText());
                 String carPlate = String.valueOf(carPlateEditText.getText());
                 String passengers = String.valueOf(passengersText.getText());
+                int day = datePicker.getDayOfMonth();
+                int month = datePicker.getMonth() + 1;
+                int year = datePicker.getYear();
+                String selectedDate = String.format("%02d/%02d/%04d", month, day, year);
 
                 if(TextUtils.isEmpty(source)){
                     Toast.makeText(getApplicationContext(),"Enter source",Toast.LENGTH_SHORT).show();
@@ -90,8 +105,8 @@ public class AddTripActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(),"Destination must be Gate3/4 or Source must be Gate3/4", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                String tripid = "trip"+(++lastId);
-                HelperTrip trip = new HelperTrip(destination,source,time,carPlate,user.getUid(),tripid,passengers);
+
+                HelperTrip trip = new HelperTrip(destination,source,time,carPlate,user.getUid(),tripid,passengers,selectedDate);
                 reference.child(tripid).setValue(trip);
 
                 Toast.makeText(getApplicationContext(), "Trip added successfully!", Toast.LENGTH_SHORT).show();
@@ -100,5 +115,12 @@ public class AddTripActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
+    private int getLastId(String orderId) {
+        try {
+            return Integer.parseInt(orderId.replace("trip", ""));
+        } catch (NumberFormatException e) {
+            return 0;
+        }
     }
 }
