@@ -1,4 +1,6 @@
-package com.example.carpool;
+package com.example.carpool.helpers;
+
+import com.example.carpool.model.User;
 
 public class HelperUser {
     String name, email, username, password, userid;
@@ -52,5 +54,15 @@ public class HelperUser {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public User toUserEntity() {
+        User user = new User();
+        user.userId = this.userid;
+        user.email = this.email;
+        user.username = this.username;
+        user.name = this.name;
+        user.password = this.password;
+        return user;
     }
 }

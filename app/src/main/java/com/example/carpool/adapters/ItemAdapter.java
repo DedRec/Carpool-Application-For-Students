@@ -1,10 +1,9 @@
-package com.example.carpool;
+package com.example.carpool.adapters;
 
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -13,6 +12,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.transition.AutoTransition;
 import androidx.transition.TransitionManager;
+
+import com.example.carpool.R;
+import com.example.carpool.items.TripItem;
 
 import java.util.ArrayList;
 

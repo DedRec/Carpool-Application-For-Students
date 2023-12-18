@@ -1,4 +1,4 @@
-package com.example.carpool;
+package com.example.carpool.helpers;
 
 public class HelperOrder {
     String driverid,userid,source, destination, carPlate, driverName, orderid, orderTime, orderPrice, orderState;

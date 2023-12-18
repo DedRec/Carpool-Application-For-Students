@@ -1,4 +1,4 @@
-package com.example.carpool;
+package com.example.carpool.helpers;
 
 import java.util.ArrayList;
 

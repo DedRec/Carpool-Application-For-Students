@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <item
+    <!--<item
         android:id="@+id/cart_info"
         android:icon="@drawable/shopping_cart_icon"
         android:title="@string/cart_title"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="ifRoom" />-->
     <item
         android:id="@+id/profile_data"
         android:icon="@drawable/profile_icon"
@@ -17,11 +17,11 @@
         android:title=""
         app:showAsAction="always">
         <menu>
-            <item
+            <!--<item
                 android:id="@+id/payment_info"
                 android:icon="@drawable/money_sign_icon"
                 android:title="@string/payment_info"
-                app:showAsAction="ifRoom" />
+                app:showAsAction="ifRoom" />-->
             <item
                 android:id="@+id/order_history_info"
                 android:icon="@drawable/history_order_track_icon"

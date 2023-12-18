@@ -1,39 +1,27 @@
 package com.example.carpool;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.transition.AutoTransition;
-import androidx.transition.TransitionManager;
 
-import android.content.ClipData;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
+import com.example.carpool.adapters.ItemAdapter;
+import com.example.carpool.items.TripItem;
+import com.example.carpool.model.FirebaseDB;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
-import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
     private RecyclerView myRecyclerView;
@@ -41,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView.LayoutManager myLayoutManager;
     private FirebaseAuth auth;
     private FirebaseUser user;
-    DatabaseReference reference;
+    private FirebaseDB firebaseDB;
     Intent intentMain;
     ArrayList<TripItem> itemList;
 
@@ -49,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        reference = FirebaseDatabase.getInstance().getReference("trips");
+        firebaseDB = FirebaseDB.getInstance();
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
 
@@ -74,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
         myRecyclerView.setHasFixedSize(true);
         myLayoutManager = new LinearLayoutManager(this);
 
-        reference.addValueEventListener(new ValueEventListener() {
+        firebaseDB.getTripsReference().addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 itemList.clear();
@@ -107,8 +95,6 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onBookClick(int position) {
-                //itemList.get(position).setTo("Booked");
-                //myAdapter.notifyItemChanged(position);
                 String driverId = itemList.get(position).getDriverId();
                 String source = itemList.get(position).getFrom();
                 String destination = itemList.get(position).getTo();
@@ -137,7 +123,7 @@ public class MainActivity extends AppCompatActivity {
 
     public boolean onOptionsItemSelected(MenuItem item){
         int id = item.getItemId();
-        if(id == R.id.payment_info){
+        /*if(id == R.id.payment_info){
             intentMain = new Intent(MainActivity.this,PaymentActivity.class);
             startActivity(intentMain);
             return true;
@@ -145,7 +131,8 @@ public class MainActivity extends AppCompatActivity {
             intentMain = new Intent(MainActivity.this,CartActivity.class);
             startActivity(intentMain);
             return true;
-        } else if (id == R.id.order_history_info) {
+        } else */
+        if (id == R.id.order_history_info) {
             intentMain = new Intent(MainActivity.this,OrderActivity.class);
             startActivity(intentMain);
             return true;

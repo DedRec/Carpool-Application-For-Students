@@ -5,20 +5,19 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.carpool.helpers.HelperOrder;
+import com.example.carpool.helpers.HelperTrip;
+import com.example.carpool.model.FirebaseDB;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -33,20 +32,15 @@ public class PaymentActivity extends AppCompatActivity {
     private HelperTrip trip;
     private FirebaseAuth auth;
     private FirebaseUser user;
-    private DatabaseReference driverReference;
-    private DatabaseReference orderReference;
-    private DatabaseReference tripReference;
+    private FirebaseDB firebaseDB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_payment);
-
+        firebaseDB = FirebaseDB.getInstance();
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
-        driverReference = FirebaseDatabase.getInstance().getReference("drivers");
-        orderReference = FirebaseDatabase.getInstance().getReference("orders");
-        tripReference = FirebaseDatabase.getInstance().getReference("trips");
 
         driverNameT = findViewById(R.id.driverNameValue);
         timeT = findViewById(R.id.timeValue);
@@ -57,39 +51,43 @@ public class PaymentActivity extends AppCompatActivity {
         radioGroup = findViewById(R.id.paymentMethodGroup);
 
         Intent intent = getIntent();
-        Query checkUserDatabase = driverReference.orderByChild("userid").equalTo(intent.getStringExtra("driverId"));
-        checkUserDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+        driverid = intent.getStringExtra("driverId");
+        firebaseDB.getDriverName(driverid, new FirebaseDB.DataCallback<String>() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(snapshot.exists()){
-                    driverName =  snapshot.child(intent.getStringExtra("driverId")).child("name").getValue(String.class);
-                    driverid = snapshot.child(intent.getStringExtra("driverId")).child("userid").getValue(String.class);
-                    driverNameT.setText(driverName);
-                }
+            public void onDataLoaded(String data) {
+                driverName = data;
+                driverNameT.setText(data);
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
+            public void onError(String errorMessage) {
             }
         });
 
-        Query checkTripDatabase = tripReference.orderByChild("tripid").equalTo(intent.getStringExtra("tripid"));
-        checkTripDatabase.addValueEventListener(new ValueEventListener() {
+        firebaseDB.getTrip(intent.getStringExtra("tripid"), new FirebaseDB.DataCallback<HelperTrip>() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(snapshot.exists()){
-                    trip =  snapshot.child(intent.getStringExtra("tripid")).getValue(HelperTrip.class);
-                    orders = (trip.getOrders() != null) ? trip.getOrders() : new ArrayList<>();
-                }
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
+            public void onDataLoaded(HelperTrip data) {
+                trip = data;
 
+            }
+
+            @Override
+            public void onError(String errorMessage) {
+            }
+        });
+        firebaseDB.getTripOrders(intent.getStringExtra("tripid"), new FirebaseDB.DataCallback<ArrayList<String>>() {
+            @Override
+            public void onDataLoaded(ArrayList<String> data) {
+                orders = data;
+            }
+
+            @Override
+            public void onError(String errorMessage) {
+                orders =  new ArrayList<>();
             }
         });
 
-        orderReference.orderByKey().limitToLast(1).addValueEventListener(new ValueEventListener() {
+        firebaseDB.getOrderReference().orderByKey().limitToLast(1).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 int lastId = 0;
@@ -135,9 +133,9 @@ public class PaymentActivity extends AppCompatActivity {
                 orders.add(orderid);
 
                 HelperOrder order = new HelperOrder(driverid,user.getUid(),intent.getStringExtra("source"),intent.getStringExtra("destination"),intent.getStringExtra("carPlate"),driverName,orderid,intent.getStringExtra("time"));
-                tripReference.child(trip.getTripid()).child("passengers_number").setValue(passengers);
-                tripReference.child(trip.getTripid()).child("orders").setValue(orders);
-                orderReference.child(orderid).setValue(order);
+                firebaseDB.updateTripPassengerNumber(trip.getTripid(),passengers);
+                firebaseDB.updateTripOrders(trip.getTripid(),orders);
+                firebaseDB.insertOrder(orderid,order);
 
                 Intent intent2 = new Intent(PaymentActivity.this, OrderActivity.class);
                 startActivity(intent2);

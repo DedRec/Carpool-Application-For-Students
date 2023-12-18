@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.carpool.model.FirebaseDB;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -34,12 +35,11 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
+        FirebaseDB firebaseDB = FirebaseDB.getInstance();
         mAuth = FirebaseAuth.getInstance();
 
         loginBtn = findViewById(R.id.login_btn);
@@ -59,12 +59,6 @@ public class LoginActivity extends AppCompatActivity {
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*Intent intent1 = new Intent(LoginActivity.this,MainActivity.class);
-                startActivity(intent1);
-                finish();*/
-                /*if(validateUsername() && validatePassword()){
-                    checkUser();
-                }*/
                 String email = String.valueOf(loginEmail.getText());
                 String password = String.valueOf(loginPassword.getText());
 
@@ -86,7 +80,7 @@ public class LoginActivity extends AppCompatActivity {
                                     Log.d("FBAuth", "signInWithEmail:success");
                                     Toast.makeText(LoginActivity.this, "Login successful.",
                                             Toast.LENGTH_SHORT).show();
-                                    checkUser();
+                                    firebaseDB.checkUser(mAuth);
                                     Intent intent1 = new Intent(LoginActivity.this,MainActivity.class);
                                     startActivity(intent1);
                                     finish();
@@ -113,101 +107,4 @@ public class LoginActivity extends AppCompatActivity {
             finish();
         }
     }
-
-    public void checkUser(){
-        FirebaseUser user = mAuth.getCurrentUser();
-        final String[] username = new String[1];
-        final String[] password = new String[1];
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("drivers");
-        Query checkDriverDatabase = reference.orderByChild("userid").equalTo(user.getUid());
-        DatabaseReference reference2 = FirebaseDatabase.getInstance().getReference("users");
-        Query checkUserDatabase = reference2.orderByChild("userid").equalTo(user.getUid());
-        checkDriverDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(snapshot.exists()){
-                    username[0] =  snapshot.child(user.getUid()).child("username").getValue(String.class);
-                    password[0] = snapshot.child(user.getUid()).child("password").getValue(String.class);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-        checkUserDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(!snapshot.exists()){
-                    HelperUser helper = new HelperUser(user.getDisplayName(), user.getEmail(),username[0],password[0],user.getUid());
-                    reference2.child(user.getUid()).setValue(helper);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-    }
-
-    /*public Boolean validateUsername(){
-        String val = loginUsername.getText().toString();
-        if(val.isEmpty()){
-            loginUsername.setError("Enter a valid username");
-            return false;
-        }else{
-            loginUsername.setError(null);
-            return true;
-        }
-    }
-
-    public Boolean validatePassword(){
-        String val = loginPassword.getText().toString();
-        if(val.isEmpty()){
-            loginPassword.setError("Incorrect Password");
-            return false;
-        }else{
-            loginPassword.setError(null);
-            return true;
-        }
-    }*/
-
-    /*public void checkUser(){
-        String userUsername = loginUsername.getText().toString().trim();
-        String userPassword = loginPassword.getText().toString().trim();
-
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("users");
-        Query checkUserDatabase = reference.orderByChild("username").equalTo(userUsername);
-
-        checkUserDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(snapshot.exists()){
-                    loginUsername.setError(null);
-                    String passwordFromDB = snapshot.child(userUsername).child("password").getValue(String.class);
-
-                    if (passwordFromDB.equals(userPassword)){
-                        loginUsername.setError(null);
-
-                        Intent intent1 = new Intent(LoginActivity.this,MainActivity.class);
-                        startActivity(intent1);
-                        finish();
-                    }else{
-                        loginPassword.setError("Invalid Credentials");
-                        loginPassword.requestFocus();
-                    }
-                }else{
-                    loginUsername.setError("Username doesn't exist");
-                    loginUsername.requestFocus();
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-    }*/
 }

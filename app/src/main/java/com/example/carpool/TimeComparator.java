@@ -1,5 +1,7 @@
 package com.example.carpool;
 
+import com.example.carpool.items.TripItem;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Comparator;

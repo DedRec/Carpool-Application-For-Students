@@ -1,4 +1,4 @@
-package com.example.carpool;
+package com.example.carpool.items;
 
 public class OrderItem {
     String driverid,userid,source, destination, carPlate, driverName, orderid, orderTime, orderPrice, orderState;
