@@ -6,7 +6,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -14,29 +13,29 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.example.drivercarpool.helpers.HelperTrip;
+import com.example.drivercarpool.model.FirebaseDB;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 public class AddTripActivity extends AppCompatActivity {
+    private String tripid;
+    private Button addBtn;
+    private DatePicker datePicker;
+    private EditText sourceEditText, destinationEditText, carPlateEditText, passengersText;
+    private Spinner timeSpinner;
     private FirebaseAuth auth;
     private FirebaseUser user;
-    private DatabaseReference reference;
-    String tripid;
-    Button addBtn;
-    DatePicker datePicker;
-    EditText sourceEditText, destinationEditText, carPlateEditText, passengersText;
-    Spinner timeSpinner;
+    private FirebaseDB firebaseDB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_trip);
-        reference = FirebaseDatabase.getInstance().getReference("trips");
+        firebaseDB = FirebaseDB.getInstance();
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
 
@@ -48,7 +47,7 @@ public class AddTripActivity extends AppCompatActivity {
         datePicker = findViewById(R.id.datePicker);
         addBtn = findViewById(R.id.add_btn);
 
-        reference.orderByKey().limitToLast(1).addValueEventListener(new ValueEventListener() {
+        firebaseDB.getTripsReference().orderByKey().limitToLast(1).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
@@ -107,7 +106,7 @@ public class AddTripActivity extends AppCompatActivity {
                 }
 
                 HelperTrip trip = new HelperTrip(destination,source,time,carPlate,user.getUid(),tripid,passengers,selectedDate);
-                reference.child(tripid).setValue(trip);
+                firebaseDB.insertTrip(tripid,trip);
 
                 Toast.makeText(getApplicationContext(), "Trip added successfully!", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(AddTripActivity.this,MainActivity.class);

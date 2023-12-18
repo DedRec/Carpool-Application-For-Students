@@ -13,27 +13,26 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.example.drivercarpool.model.FirebaseDB;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class EditActivity extends AppCompatActivity {
+    private Button editBtn,cancelBtn;
+    private DatePicker datePicker;
+    private EditText sourceEditText, destinationEditText, carPlateEditText, passengersText;
+    private Spinner timeSpinner;
     private FirebaseAuth auth;
-    private FirebaseUser user;
-    private DatabaseReference reference;
-    Button editBtn,cancelBtn;
-    DatePicker datePicker;
-    EditText sourceEditText, destinationEditText, carPlateEditText, passengersText;
-    Spinner timeSpinner;
+    private FirebaseDB firebaseDB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit);
-        reference = FirebaseDatabase.getInstance().getReference("trips");
+        firebaseDB = FirebaseDB.getInstance();
         auth = FirebaseAuth.getInstance();
-        user = auth.getCurrentUser();
         Intent intent = getIntent();
 
         timeSpinner = findViewById(R.id.time_spinner);
@@ -91,15 +90,14 @@ public class EditActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(),"Destination must be Gate3/4 or Source must be Gate3/4", Toast.LENGTH_SHORT).show();
                     return;
                 }
+
                 String tripid = intent.getStringExtra("tripid");
-                DatabaseReference tripReference = reference.child(tripid);
-                //HelperTrip helper = new HelperTrip(destination,source,time,carPlate,user.getUid(),tripid,passengers);
-                tripReference.child("to").setValue(destination);
-                tripReference.child("from").setValue(source);
-                tripReference.child("time").setValue(time);
-                tripReference.child("carPlate").setValue(carPlate);
-                tripReference.child("passengers_number").setValue(passengers);
-                tripReference.child("date").setValue(selectedDate);
+                firebaseDB.updateTripDestination(tripid,destination);
+                firebaseDB.updateTripSource(tripid,source);
+                firebaseDB.updateTripTime(tripid,time);
+                firebaseDB.updateTripCarPlate(tripid,carPlate);
+                firebaseDB.updateTripPassengerNumber(tripid,passengers);
+                firebaseDB.updateTripDate(tripid, selectedDate);
 
                 Intent intent2 = new Intent(EditActivity.this,MainActivity.class);
                 startActivity(intent2);

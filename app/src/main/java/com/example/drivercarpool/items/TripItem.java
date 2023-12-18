@@ -1,4 +1,4 @@
-package com.example.drivercarpool;
+package com.example.drivercarpool.items;
 
 import android.widget.LinearLayout;
 

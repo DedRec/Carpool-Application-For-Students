@@ -15,6 +15,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.drivercarpool.model.FirebaseDB;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -28,20 +29,18 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 public class LoginActivity extends AppCompatActivity {
-    Button loginBtn;
-    TextView signUpLink;
-    Intent intentLogin;
-    EditText loginEmail, loginPassword;
-
+    private Button loginBtn;
+    private TextView signUpLink;
+    private Intent intentLogin;
+    private EditText loginEmail, loginPassword;
     private FirebaseAuth mAuth;
-
-
+    private FirebaseDB firebaseDB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
+        firebaseDB = FirebaseDB.getInstance();
         mAuth = FirebaseAuth.getInstance();
 
         loginBtn = findViewById(R.id.login_btn);
@@ -81,7 +80,7 @@ public class LoginActivity extends AppCompatActivity {
                                     Log.d("FBAuth", "signInWithEmail:success");
                                     Toast.makeText(LoginActivity.this, "Login successful.",
                                             Toast.LENGTH_SHORT).show();
-                                    checkUser();
+                                    firebaseDB.checkUser(mAuth);
                                     Intent intent1 = new Intent(LoginActivity.this,MainActivity.class);
                                     startActivity(intent1);
                                     finish();
@@ -107,42 +106,5 @@ public class LoginActivity extends AppCompatActivity {
             startActivity(intent1);
             finish();
         }
-    }
-    public void checkUser(){
-        FirebaseUser user = mAuth.getCurrentUser();
-        final String[] username = new String[1];
-        final String[] password = new String[1];
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("drivers");
-        Query checkDriverDatabase = reference.orderByChild("userid").equalTo(user.getUid());
-        DatabaseReference reference2 = FirebaseDatabase.getInstance().getReference("users");
-        Query checkUserDatabase = reference2.orderByChild("userid").equalTo(user.getUid());
-        checkUserDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(snapshot.exists()){
-                   username[0] =  snapshot.child(user.getUid()).child("username").getValue(String.class);
-                   password[0] = snapshot.child(user.getUid()).child("password").getValue(String.class);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-        checkDriverDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(!snapshot.exists()){
-                    Helper helper = new Helper(user.getDisplayName(), user.getEmail(),username[0],password[0],user.getUid());
-                    reference.child(user.getUid()).setValue(helper);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
     }
 }

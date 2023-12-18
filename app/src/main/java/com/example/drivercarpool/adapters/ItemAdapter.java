@@ -1,4 +1,4 @@
-package com.example.drivercarpool;
+package com.example.drivercarpool.adapters;
 
 
 import android.view.LayoutInflater;
@@ -10,8 +10,9 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.transition.AutoTransition;
-import androidx.transition.TransitionManager;
+
+import com.example.drivercarpool.R;
+import com.example.drivercarpool.items.TripItem;
 
 import java.util.ArrayList;
 

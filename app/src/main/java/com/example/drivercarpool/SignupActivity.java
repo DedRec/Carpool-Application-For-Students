@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.drivercarpool.model.FirebaseDB;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Firebase;
@@ -28,20 +29,18 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 public class SignupActivity extends AppCompatActivity {
-    TextView loginLink;
-    Intent intentSignUp;
-    EditText signupName, signupEmail, signupUsername, signupPassword;
-    Button signUpBtn;
-
+    private TextView loginLink;
+    private Intent intentSignUp;
+    private EditText signupName, signupEmail, signupUsername, signupPassword;
+    private Button signUpBtn;
     private FirebaseAuth mAuth;
-    private FirebaseDatabase database;
-    private DatabaseReference reference;
+    private FirebaseDB firebaseDB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
-
+        firebaseDB = FirebaseDB.getInstance();
         mAuth = FirebaseAuth.getInstance();
 
         loginLink = findViewById(R.id.login_link);
@@ -54,16 +53,10 @@ public class SignupActivity extends AppCompatActivity {
         signUpBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                database = FirebaseDatabase.getInstance();
-                reference = database.getReference("drivers");
-
                 String name = String.valueOf(signupName.getText());
                 String email = String.valueOf(signupEmail.getText());
                 String username = String.valueOf(signupUsername.getText());
                 String password = String.valueOf(signupPassword.getText());
-
-
-                Query checkUserDatabase = reference.orderByChild("username").equalTo(username);
 
                 if(TextUtils.isEmpty(email)){
                     Toast.makeText(SignupActivity.this,"Enter your email",Toast.LENGTH_SHORT).show();
@@ -88,46 +81,16 @@ public class SignupActivity extends AppCompatActivity {
                     return;
                 }
 
-                checkUserDatabase.addValueEventListener(new ValueEventListener() {
+                firebaseDB.signUp(name, email, username, password, mAuth, getApplicationContext(), new FirebaseDB.SignUpCallback() {
                     @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        if(snapshot.exists()){
-                            signupUsername.setError("Username already exists");
-                        }else{
-                            mAuth.createUserWithEmailAndPassword(email, password)
-                                    .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<AuthResult> task) {
-                                            if (task.isSuccessful()) {
-                                                FirebaseUser user = mAuth.getCurrentUser();
-
-                                                UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                                                        .setDisplayName(name)
-                                                        .build();
-
-                                                user.updateProfile(profileUpdates);
-
-                                                Log.d("FBAuth", "createUserWithEmail:success");
-                                                Toast.makeText(SignupActivity.this, "Account created successfully.",
-                                                        Toast.LENGTH_SHORT).show();
-                                                Helper helper = new Helper(name,email,username,password,user.getUid());
-                                                reference.child(user.getUid()).setValue(helper);
-                                                intentSignUp = new Intent(SignupActivity.this,LoginActivity.class);
-                                                startActivity(intentSignUp);
-                                                finish();
-                                            } else {
-                                                Log.w("FBAuth", "createUserWithEmail:failure", task.getException());
-                                                Toast.makeText(SignupActivity.this, "Authentication failed.",
-                                                        Toast.LENGTH_SHORT).show();
-                                            }
-                                        }
-                                    });
-                        }
+                    public void onSignUpSuccess() {
+                        Intent intent = new Intent(SignupActivity.this, LoginActivity.class);
+                        startActivity(intent);
+                        finish();
                     }
-
                     @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-
+                    public void onSignUpFailure(String errorMessage) {
+                        Toast.makeText(SignupActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
                     }
                 });
             }

@@ -1,4 +1,4 @@
-package com.example.drivercarpool;
+package com.example.drivercarpool.helpers;
 
 public class Helper {
     String name, email, username, password, userid;

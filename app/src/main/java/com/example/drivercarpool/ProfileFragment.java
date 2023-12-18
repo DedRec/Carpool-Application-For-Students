@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.drivercarpool.model.FirebaseDB;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -28,9 +29,9 @@ public class ProfileFragment extends Fragment {
     private String mParam1;
     private String mParam2;
     private Button signoutBtn,checkRequestsBtn;
-    private FirebaseAuth mAuth;
-    private DatabaseReference reference;
     private TextView nameText,usernameText,emailText;
+    private FirebaseAuth mAuth;
+    private FirebaseDB firebaseDB;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -56,11 +57,10 @@ public class ProfileFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
-
+        firebaseDB = FirebaseDB.getInstance();
         mAuth = FirebaseAuth.getInstance();
-        reference = FirebaseDatabase.getInstance().getReference("drivers");
+
         FirebaseUser user = mAuth.getCurrentUser();
         nameText = view.findViewById(R.id.name_view);
         emailText = view.findViewById(R.id.email_view);
@@ -70,7 +70,17 @@ public class ProfileFragment extends Fragment {
 
         nameText.setText(user.getDisplayName());
         emailText.setText(user.getEmail());
-        getUsername(user.getUid());
+        firebaseDB.getUsername(user.getUid(), new FirebaseDB.DataCallback<String>() {
+            @Override
+            public void onDataLoaded(String data) {
+                usernameText.setText(data);
+            }
+
+            @Override
+            public void onError(String errorMessage) {
+                usernameText.setText("404 Username Not Found");
+            }
+        });
 
         signoutBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -91,26 +101,5 @@ public class ProfileFragment extends Fragment {
             }
         });
         return view;
-    }
-    public void getUsername(String uid){
-
-        Query checkUserDatabase = reference.orderByChild("userid").equalTo(uid);
-        checkUserDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(snapshot.exists()){
-                    String username =  snapshot.child(uid).child("username").getValue(String.class);
-                    usernameText.setText(username);
-                }else{
-                    String username = "USERNAME NOT FOUND";
-                    usernameText.setText(username);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
     }
 }
