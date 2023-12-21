@@ -55,14 +55,4 @@ public class HelperUser {
     public void setPassword(String password) {
         this.password = password;
     }
-
-    public User toUserEntity() {
-        User user = new User();
-        user.userId = this.userid;
-        user.email = this.email;
-        user.username = this.username;
-        user.name = this.name;
-        user.password = this.password;
-        return user;
-    }
 }

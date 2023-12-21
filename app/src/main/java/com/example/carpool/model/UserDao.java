@@ -22,7 +22,7 @@ public interface UserDao {
     LiveData<List<User>> getAllUsers();
 
     @Query("SELECT * FROM users WHERE userId = :userId")
-    LiveData<User> getUserById(String userId);
+    User getUserById(String userId);
 
     @Update
     void update(User user);

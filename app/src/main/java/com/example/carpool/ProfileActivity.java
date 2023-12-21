@@ -5,10 +5,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TextView;
 
 import com.example.carpool.helpers.HelperUser;
 import com.example.carpool.model.FirebaseDB;
+import com.example.carpool.model.User;
 import com.example.carpool.viewmodel.UserViewModel;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -22,12 +24,13 @@ public class ProfileActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private FirebaseUser user;
     private FirebaseDB firebaseDB;
+    private UserViewModel mUserViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
-
+        mUserViewModel = new ViewModelProvider(this).get(UserViewModel.class);
         firebaseDB = FirebaseDB.getInstance();
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
@@ -36,18 +39,11 @@ public class ProfileActivity extends AppCompatActivity {
         emailText = findViewById(R.id.email_view);
         usernameText = findViewById(R.id.username_view);
 
-        nameText.setText(user.getDisplayName());
-        emailText.setText(user.getEmail());
-
-        firebaseDB.getUsername(user.getUid(), new FirebaseDB.DataCallback<String>() {
-            @Override
-            public void onDataLoaded(String data) {
-                usernameText.setText(data);
-            }
-
-            @Override
-            public void onError(String errorMessage) {
-                usernameText.setText("404 Username Not Found");
+        mUserViewModel.getUserById(user.getUid()).observe(this, userRoom -> {
+            if(userRoom!=null) {
+                usernameText.setText(userRoom.username);
+                nameText.setText(userRoom.name);
+                emailText.setText(userRoom.email);
             }
         });
     }

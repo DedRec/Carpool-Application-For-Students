@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -69,8 +70,10 @@ public class MainActivity extends AppCompatActivity {
 
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     TripItem trip = dataSnapshot.getValue(TripItem.class);
-                    if(Integer.parseInt(trip.getPassengers_number()) > 0){
-                        itemList.add(trip);
+                    if(TextUtils.equals(trip.getTripState(),"Not Started")){
+                        if(Integer.parseInt(trip.getPassengers_number()) > 0){
+                            itemList.add(trip);
+                        }
                     }
                 }
                 Collections.sort(itemList, new TimeComparator());

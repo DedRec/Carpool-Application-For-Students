@@ -10,7 +10,7 @@ import java.util.Date;
 import java.util.Locale;
 
 public class TripItem {
-    String to,from,time,carPlate, driverId, tripid, passengers_number, date, day, dayOfMonth, month, year;
+    String to,from,time,carPlate, driverId, tripid, passengers_number, date, day, dayOfMonth, month, year, tripState;
     ArrayList<String> orders;
     LinearLayout layout;
 
@@ -40,6 +40,14 @@ public class TripItem {
         }catch (java.text.ParseException e) {
             e.printStackTrace();
         }
+    }
+
+    public String getTripState() {
+        return tripState;
+    }
+
+    public void setTripState(String tripState) {
+        this.tripState = tripState;
     }
 
     public String getDayOfMonth() {

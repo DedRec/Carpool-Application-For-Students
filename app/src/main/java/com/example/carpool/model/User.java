@@ -15,6 +15,11 @@ public class User {
     public String username;
     @NonNull
     public String name;
-    @NonNull
-    public String password;
+
+    public User(@NonNull String userId, @NonNull String email, @NonNull String username, @NonNull String name) {
+        this.userId = userId;
+        this.email = email;
+        this.username = username;
+        this.name = name;
+    }
 }

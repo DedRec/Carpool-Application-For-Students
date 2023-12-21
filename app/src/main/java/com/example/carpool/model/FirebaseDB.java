@@ -168,6 +168,22 @@ public class FirebaseDB {
         void onDataLoaded(T data);
         void onError(String errorMessage);
     }
+    public void getUser(String userId, DataCallback<HelperUser> callback) {
+        userReference.child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    HelperUser user = snapshot.getValue(HelperUser.class);
+                    callback.onDataLoaded(user);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                callback.onError(error.getMessage());
+            }
+        });
+    }
     public void getUsername(String uid, DataCallback<String> callback) {
         Query checkUserDatabase = userReference.orderByChild("userid").equalTo(uid);
         checkUserDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
