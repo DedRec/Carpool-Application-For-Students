@@ -37,4 +37,5 @@
     <string name="order_price">50 L.E.</string>
     <string name="carPlate_label">Car Plate Number</string>
     <string name="carpool">Carpool</string>
+    <string name="bypass_time_constraint">Bypass Time Constraint</string>
 </resources>

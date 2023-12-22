@@ -1,9 +1,14 @@
 package com.example.carpool.helpers;
 
+import android.icu.text.SimpleDateFormat;
+import android.icu.util.Calendar;
+
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 public class HelperTrip {
-    String to,from,time,carPlate, driverId, tripid, passengers_number;
+    String to,from,time,carPlate, driverId, tripid, passengers_number, date, tripState;
     ArrayList<String> orders;
 
     public HelperTrip() {
@@ -28,6 +33,22 @@ public class HelperTrip {
         this.driverId = driverId;
         this.tripid = tripid;
         this.passengers_number = "3";
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public String getTripState() {
+        return tripState;
+    }
+
+    public void setTripState(String tripState) {
+        this.tripState = tripState;
     }
 
     public ArrayList<String> getOrders() {

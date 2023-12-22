@@ -277,9 +277,11 @@ public class FirebaseDB {
     public void updateTripPassengerNumber(String tripId, String passengers){
         tripsReference.child(tripId).child("passengers_number").setValue(passengers);
     }
+    public void insertOrderDate(String orderId, String date) {
+        orderReference.child(orderId).child("tripDate").setValue(date);
+    }
     public void insertOrder(String orderId, HelperOrder order){
         orderReference.child(orderId).setValue(order);
     }
-
 
 }

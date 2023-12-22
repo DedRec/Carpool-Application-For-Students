@@ -1,7 +1,13 @@
 package com.example.carpool.items;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
+
 public class OrderItem {
-    String driverid,userid,source, destination, carPlate, driverName, orderid, orderTime, orderPrice, orderState;
+    String driverid,userid,source, destination, carPlate, driverName, orderid, orderTime, orderPrice, orderState, tripDate;
     public OrderItem() {
     }
 
@@ -14,6 +20,14 @@ public class OrderItem {
         this.orderTime = orderTime;
         this.orderState = orderState;
         this.orderPrice = "$50";
+    }
+
+    public String getTripDate() {
+        return tripDate;
+    }
+
+    public void setTripDate(String tripDate) {
+        this.tripDate = tripDate;
     }
 
     public String getSource() {
@@ -86,5 +100,25 @@ public class OrderItem {
 
     public void setOrderState(String orderState) {
         this.orderState = orderState;
+    }
+
+    public static String convertDateFormat(String inputDate) {
+        SimpleDateFormat inputFormat = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
+        SimpleDateFormat outputFormat = new SimpleDateFormat("MMMM d, yyyy", Locale.US);
+
+        try {
+            Date date = inputFormat.parse(inputDate);
+
+            // Add one day to the date
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(date);
+            calendar.add(Calendar.DAY_OF_MONTH, 1);
+            date = calendar.getTime();
+
+            return outputFormat.format(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return null; // Handle the parse exception as needed
+        }
     }
 }

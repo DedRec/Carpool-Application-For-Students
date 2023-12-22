@@ -32,6 +32,7 @@ public class TripItem {
 
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(date);
+            calendar.add(Calendar.DATE, 1);
 
             this.month = new SimpleDateFormat("MMM", Locale.US).format(date);
             this.dayOfMonth = String.valueOf(calendar.get(Calendar.DAY_OF_MONTH));

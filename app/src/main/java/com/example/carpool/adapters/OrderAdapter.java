@@ -1,6 +1,8 @@
 package com.example.carpool.adapters;
 
 
+import static com.example.carpool.items.OrderItem.convertDateFormat;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +28,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ItemViewHold
         public TextView mTextView6;
         public TextView mTextView7;
         public TextView mTextView8;
+        public TextView mTextView9;
 
         public ItemViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -37,6 +40,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ItemViewHold
             mTextView6 = itemView.findViewById(R.id.textViewOrderTime);
             mTextView7 = itemView.findViewById(R.id.textViewDriverName);
             mTextView8 = itemView.findViewById(R.id.textViewCarPlate);
+            mTextView9 = itemView.findViewById(R.id.textViewOrderDate);
         }
     }
 
@@ -64,6 +68,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ItemViewHold
         holder.mTextView6.setText(currentItem.getOrderTime());
         holder.mTextView7.setText(currentItem.getDriverName());
         holder.mTextView8.setText(currentItem.getCarPlate());
+        holder.mTextView9.setText(convertDateFormat(currentItem.getTripDate()));
     }
 
     @Override

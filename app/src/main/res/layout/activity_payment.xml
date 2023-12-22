@@ -146,4 +146,11 @@
         android:layout_gravity="center_horizontal"
         android:text="@string/btn_add_payment"
         android:layout_marginTop="16dp" />
+    <Button
+        android:id="@+id/btn_bypass_time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="@string/bypass_time_constraint"
+        android:layout_marginTop="8dp" />
 </LinearLayout>
