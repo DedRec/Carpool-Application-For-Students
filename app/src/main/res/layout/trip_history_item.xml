@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardCornerRadius="4dp"
+    android:layout_marginVertical="5dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/textViewTripIdLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Trip ID:"
+            android:textSize="16sp"
+            android:textColor="@android:color/black"/>
+
+        <TextView
+            android:id="@+id/textViewTripId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ABC123"
+            android:textSize="16sp"
+            android:textColor="@android:color/black"
+            android:layout_marginStart="8dp"
+            android:layout_toEndOf="@id/textViewTripIdLabel"/>
+
+        <TextView
+            android:id="@+id/textViewSourceLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Source:"
+            android:textSize="16sp"
+            android:textColor="@android:color/black"
+            android:layout_below="@id/textViewTripIdLabel"
+            android:layout_marginTop="8dp"/>
+
+        <TextView
+            android:id="@+id/textViewSource"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Your Source"
+            android:textSize="16sp"
+            android:textColor="@android:color/black"
+            android:layout_marginStart="8dp"
+            android:layout_toEndOf="@id/textViewSourceLabel"
+            android:layout_below="@id/textViewTripId"
+            android:layout_marginTop="8dp"/>
+
+        <TextView
+            android:id="@+id/textViewDestinationLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Destination:"
+            android:textSize="16sp"
+            android:textColor="@android:color/black"
+            android:layout_below="@id/textViewSourceLabel"
+            android:layout_marginTop="8dp"/>
+
+        <TextView
+            android:id="@+id/textViewDestination"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Your Destination"
+            android:textSize="16sp"
+            android:textColor="@android:color/black"
+            android:layout_marginStart="8dp"
+            android:layout_toEndOf="@id/textViewDestinationLabel"
+            android:layout_below="@id/textViewSource"
+            android:layout_marginTop="8dp"/>
+
+        <TextView
+            android:id="@+id/textViewTripPriceLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Trip Price:"
+            android:textSize="16sp"
+            android:textColor="@android:color/black"
+            android:layout_below="@id/textViewDestinationLabel"
+            android:layout_marginTop="8dp"/>
+
+        <TextView
+            android:id="@+id/textViewTripPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="$50.00"
+            android:textSize="16sp"
+            android:textColor="@android:color/black"
+            android:layout_marginStart="8dp"
+            android:layout_toEndOf="@id/textViewTripPriceLabel"
+            android:layout_below="@id/textViewDestination"
+            android:layout_marginTop="8dp"/>
+
+        <TextView
+            android:id="@+id/textViewTripTimeLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Trip Time:"
+            android:textSize="16sp"
+            android:textColor="@android:color/black"
+            android:layout_below="@id/textViewTripPriceLabel"
+            android:layout_marginTop="8dp"/>
+
+        <TextView
+            android:id="@+id/textViewTripTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="7:30 AM"
+            android:textSize="16sp"
+            android:textColor="@android:color/black"
+            android:layout_marginStart="8dp"
+            android:layout_toEndOf="@id/textViewTripTimeLabel"
+            android:layout_below="@id/textViewTripPrice"
+            android:layout_marginTop="8dp"/>
+
+        <TextView
+            android:id="@+id/textViewCarPlateLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Car Plate Number:"
+            android:textSize="16sp"
+            android:textColor="@android:color/black"
+            android:layout_below="@id/textViewTripTimeLabel"
+            android:layout_marginTop="8dp"/>
+
+        <TextView
+            android:id="@+id/textViewCarPlate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ABC 123"
+            android:textSize="16sp"
+            android:textColor="@android:color/black"
+            android:layout_marginStart="8dp"
+            android:layout_toEndOf="@id/textViewCarPlateLabel"
+            android:layout_below="@id/textViewTripTime"
+            android:layout_marginTop="8dp"/>
+
+        <TextView
+            android:id="@+id/textViewTripStateLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/textViewCarPlateLabel"
+            android:layout_marginTop="8dp"
+            android:text="Trip State:"
+            android:textColor="@android:color/black"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/textViewTripState"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="In Progress"
+            android:textSize="16sp"
+            android:textColor="@android:color/black"
+            android:layout_marginStart="8dp"
+            android:layout_toEndOf="@id/textViewTripStateLabel"
+            android:layout_below="@id/textViewCarPlateLabel"
+            android:layout_marginTop="8dp"/>
+
+    </RelativeLayout>
+
+
+
+</androidx.cardview.widget.CardView>

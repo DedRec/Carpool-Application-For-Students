@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,6 +15,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.drivercarpool.model.FirebaseDB;
+import com.example.drivercarpool.viewmodel.UserViewModel;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -32,6 +34,7 @@ public class ProfileFragment extends Fragment {
     private TextView nameText,usernameText,emailText;
     private FirebaseAuth mAuth;
     private FirebaseDB firebaseDB;
+    private UserViewModel mUserViewModel;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -58,30 +61,25 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
+        mUserViewModel = new ViewModelProvider(this).get(UserViewModel.class);
         firebaseDB = FirebaseDB.getInstance();
         mAuth = FirebaseAuth.getInstance();
-
         FirebaseUser user = mAuth.getCurrentUser();
+
         nameText = view.findViewById(R.id.name_view);
         emailText = view.findViewById(R.id.email_view);
         usernameText = view.findViewById(R.id.username_view);
         signoutBtn = view.findViewById(R.id.signout_btn);
         checkRequestsBtn = view.findViewById(R.id.check_requested_trips_btn);
 
-        nameText.setText(user.getDisplayName());
-        emailText.setText(user.getEmail());
-        firebaseDB.getUsername(user.getUid(), new FirebaseDB.DataCallback<String>() {
-            @Override
-            public void onDataLoaded(String data) {
-                usernameText.setText(data);
-            }
-
-            @Override
-            public void onError(String errorMessage) {
-                usernameText.setText("404 Username Not Found");
+        mUserViewModel.getUserById(user.getUid()).observe(getActivity(), userRoom -> {
+            if(userRoom!=null) {
+                Log.d("userRepo","Fetching user from ROOM now");
+                usernameText.setText(userRoom.username);
+                nameText.setText(userRoom.name);
+                emailText.setText(userRoom.email);
             }
         });
-
         signoutBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

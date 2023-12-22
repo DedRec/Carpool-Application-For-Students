@@ -3,7 +3,7 @@ package com.example.drivercarpool.helpers;
 import java.util.ArrayList;
 
 public class HelperTrip {
-    String to,from,time,carPlate, driverId, tripid, passengers_number, date;
+    String to,from,time,carPlate, driverId, tripid, passengers_number, date, tripState;
     ArrayList<String> orders;
 
     public HelperTrip() {
@@ -18,26 +18,15 @@ public class HelperTrip {
         this.tripid = tripid;
         this.passengers_number = passengers_number;
         this.date = date;
+        this.tripState = "Not Started";
     }
 
-    public HelperTrip(String to, String from, String time, String carPlate, String driverId, String tripid, String passengers_number) {
-        this.to = to;
-        this.from = from;
-        this.time = time;
-        this.carPlate = carPlate;
-        this.driverId = driverId;
-        this.tripid = tripid;
-        this.passengers_number = passengers_number;
+    public String getTripState() {
+        return tripState;
     }
 
-    public HelperTrip(String to, String from, String time, String carPlate, String driverId, String tripid) {
-        this.to = to;
-        this.from = from;
-        this.time = time;
-        this.carPlate = carPlate;
-        this.driverId = driverId;
-        this.tripid = tripid;
-        this.passengers_number = "3";
+    public void setTripState(String tripState) {
+        this.tripState = tripState;
     }
 
     public String getDate() {

@@ -53,6 +53,16 @@
             android:textColor="#424242"
             android:textSize="20sp"
             android:textStyle="bold" />
-
+        <TextView
+            android:id="@+id/trackTrips"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:background="#7393B3"
+            android:padding="10dp"
+            android:text="@string/track_your_trips"
+            android:textColor="#424242"
+            android:textSize="20sp"
+            android:textStyle="bold" />
     </LinearLayout>
 </RelativeLayout>

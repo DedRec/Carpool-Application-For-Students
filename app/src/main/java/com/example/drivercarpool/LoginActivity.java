@@ -2,6 +2,7 @@ package com.example.drivercarpool;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -16,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.drivercarpool.model.FirebaseDB;
+import com.example.drivercarpool.viewmodel.UserViewModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -35,11 +37,13 @@ public class LoginActivity extends AppCompatActivity {
     private EditText loginEmail, loginPassword;
     private FirebaseAuth mAuth;
     private FirebaseDB firebaseDB;
+    private UserViewModel mUserViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        mUserViewModel = new ViewModelProvider(this).get(UserViewModel.class);
         firebaseDB = FirebaseDB.getInstance();
         mAuth = FirebaseAuth.getInstance();
 
@@ -81,6 +85,7 @@ public class LoginActivity extends AppCompatActivity {
                                     Toast.makeText(LoginActivity.this, "Login successful.",
                                             Toast.LENGTH_SHORT).show();
                                     firebaseDB.checkUser(mAuth);
+                                    mUserViewModel.checkUserExistsInLocalDB(mAuth.getCurrentUser().getUid());
                                     Intent intent1 = new Intent(LoginActivity.this,MainActivity.class);
                                     startActivity(intent1);
                                     finish();

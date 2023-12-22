@@ -1,7 +1,7 @@
 package com.example.drivercarpool.items;
 
 public class RequestItem {
-    String driverid,userid,source, destination, carPlate, driverName, orderid, orderTime, orderPrice, orderState;
+    String driverid,userid,source, destination, carPlate, driverName, orderid, orderTime, orderPrice, orderState, tripDate;
 
     public RequestItem() {
     }
@@ -17,6 +17,14 @@ public class RequestItem {
         this.orderTime = orderTime;
         this.orderPrice = orderPrice;
         this.orderState = orderState;
+    }
+
+    public String getTripDate() {
+        return tripDate;
+    }
+
+    public void setTripDate(String tripDate) {
+        this.tripDate = tripDate;
     }
 
     public String getDriverid() {

@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -21,10 +22,13 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
 public class AddTripActivity extends AppCompatActivity {
     private String tripid;
     private Button addBtn;
-    private DatePicker datePicker;
     private EditText sourceEditText, destinationEditText, carPlateEditText, passengersText;
     private Spinner timeSpinner;
     private FirebaseAuth auth;
@@ -44,8 +48,10 @@ public class AddTripActivity extends AppCompatActivity {
         destinationEditText = findViewById(R.id.destination_input);
         carPlateEditText = findViewById(R.id.car_plate_input);
         passengersText = findViewById(R.id.passenger_input);
-        datePicker = findViewById(R.id.datePicker);
         addBtn = findViewById(R.id.add_btn);
+        Calendar calendar = Calendar.getInstance();
+        Date currentDate = calendar.getTime();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
 
         firebaseDB.getTripsReference().orderByKey().limitToLast(1).addValueEventListener(new ValueEventListener() {
             @Override
@@ -79,10 +85,7 @@ public class AddTripActivity extends AppCompatActivity {
                 String destination = String.valueOf(destinationEditText.getText());
                 String carPlate = String.valueOf(carPlateEditText.getText());
                 String passengers = String.valueOf(passengersText.getText());
-                int day = datePicker.getDayOfMonth();
-                int month = datePicker.getMonth() + 1;
-                int year = datePicker.getYear();
-                String selectedDate = String.format("%02d/%02d/%04d", month, day, year);
+                String selectedDate = dateFormat.format(currentDate);
 
                 if(TextUtils.isEmpty(source)){
                     Toast.makeText(getApplicationContext(),"Enter source",Toast.LENGTH_SHORT).show();
@@ -100,18 +103,45 @@ public class AddTripActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(),"Enter Passengers Number",Toast.LENGTH_SHORT).show();
                     passengersText.requestFocus();
                     return;
-                }else if (!(source.toLowerCase().contains("gate3")|source.toLowerCase().contains("gate4"))&!(destination.toLowerCase().contains("gate3")|destination.toLowerCase().contains("gate4"))) {
-                    Toast.makeText(getApplicationContext(),"Destination must be Gate3/4 or Source must be Gate3/4", Toast.LENGTH_SHORT).show();
-                    return;
                 }
 
-                HelperTrip trip = new HelperTrip(destination,source,time,carPlate,user.getUid(),tripid,passengers,selectedDate);
-                firebaseDB.insertTrip(tripid,trip);
+                if (time.equals("7:30 AM")) {
+                    if (!destination.equalsIgnoreCase("Gate 3") &&
+                            !destination.equalsIgnoreCase("Gate 4")) {
+                        Toast.makeText(AddTripActivity.this, "Destination must be Gate 3 or Gate 4 when adding a 7:30AM Trip", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                }else if (time.equals("5:30 PM")) {
+                    if (!source.equalsIgnoreCase("Gate 3") &&
+                            !source.equalsIgnoreCase("Gate 4")) {
+                        Toast.makeText(AddTripActivity.this, "Source must be Gate 3 or Gate 4 when adding a 5:30PM Trip", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                }
 
-                Toast.makeText(getApplicationContext(), "Trip added successfully!", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(AddTripActivity.this,MainActivity.class);
-                startActivity(intent);
-                finish();
+                firebaseDB.checkIfTimeSlotAvailable(time, selectedDate, user.getUid(), new FirebaseDB.DataCallback<Boolean>() {
+                    @Override
+                    public void onDataLoaded(Boolean data) {
+                        if (!data) {
+                            Log.d("TimeSlot","Already taken");
+                            Toast.makeText(AddTripActivity.this, "Trip already made for this Timeslot. Try another Timeslot", Toast.LENGTH_SHORT).show();
+
+                        }else{
+                            HelperTrip trip = new HelperTrip(destination,source,time,carPlate,user.getUid(),tripid,passengers,selectedDate);
+                            firebaseDB.insertTrip(tripid,trip);
+
+                            Toast.makeText(getApplicationContext(), "Trip added successfully!", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(AddTripActivity.this,MainActivity.class);
+                            startActivity(intent);
+                            finish();
+                        }
+                    }
+
+                    @Override
+                    public void onError(String errorMessage) {
+
+                    }
+                });
             }
         });
     }

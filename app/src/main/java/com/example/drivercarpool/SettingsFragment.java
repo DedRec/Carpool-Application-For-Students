@@ -13,11 +13,11 @@ import android.widget.TextView;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class SettingsFragment extends Fragment {
-    TextView requestHistory, tripHistory;
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private String mParam1;
     private String mParam2;
+    private TextView requestHistory, tripHistory, trackTrip;
 
     public SettingsFragment() {
         // Required empty public constructor
@@ -48,6 +48,7 @@ public class SettingsFragment extends Fragment {
 
         requestHistory = view.findViewById(R.id.requestHistory);
         tripHistory = view.findViewById(R.id.tripHistory);
+        trackTrip = view.findViewById(R.id.trackTrips);
 
         requestHistory.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -60,7 +61,15 @@ public class SettingsFragment extends Fragment {
         tripHistory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(getActivity(),TripHistoryActivity.class);
+                startActivity(intent);
+            }
+        });
+        trackTrip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(),TrackTripActivity.class);
+                startActivity(intent);
             }
         });
         return view;

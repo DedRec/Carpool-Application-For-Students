@@ -26,15 +26,14 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ItemView
 
     public interface onItemClickListener {
         void onItemClick(int position);
-        void onAcceptClick(int position);
-        void onDeclineClick(int position);
+        void onConfirmClick(int position);
     }
 
     public void setOnItemListener(RequestAdapter.onItemClickListener listener){
         mListener = listener;
     }
     public static class ItemViewHolder extends RecyclerView.ViewHolder{
-        public Button acceptBtn, declineBtn;
+        public Button confirmBtn;
         public TextView mTextView1;
         public TextView mTextView2;
         public TextView mTextView3;
@@ -47,8 +46,7 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ItemView
 
         public ItemViewHolder(@NonNull View itemView, RequestAdapter.onItemClickListener listener) {
             super(itemView);
-            acceptBtn = itemView.findViewById(R.id.acceptButton);
-            declineBtn = itemView.findViewById(R.id.declineButton);
+            confirmBtn = itemView.findViewById(R.id.confirmButton);
             mTextView1 = itemView.findViewById(R.id.textViewOrderId);
             mTextView2 = itemView.findViewById(R.id.textViewSource);
             mTextView3 = itemView.findViewById(R.id.textViewDestination);
@@ -70,24 +68,13 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ItemView
                     }
                 }
             });
-            acceptBtn.setOnClickListener(new View.OnClickListener() {
+            confirmBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if(listener!=null){
                         int position = getBindingAdapterPosition();
                         if(position != RecyclerView.NO_POSITION){
-                            listener.onAcceptClick(position);
-                        }
-                    }
-                }
-            });
-            declineBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if(listener!=null){
-                        int position = getBindingAdapterPosition();
-                        if(position != RecyclerView.NO_POSITION){
-                            listener.onDeclineClick(position);
+                            listener.onConfirmClick(position);
                         }
                     }
                 }

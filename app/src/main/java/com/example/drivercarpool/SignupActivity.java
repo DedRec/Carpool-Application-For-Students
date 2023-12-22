@@ -2,6 +2,7 @@ package com.example.drivercarpool;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,6 +15,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.drivercarpool.model.FirebaseDB;
+import com.example.drivercarpool.model.User;
+import com.example.drivercarpool.viewmodel.UserViewModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Firebase;
@@ -35,11 +38,13 @@ public class SignupActivity extends AppCompatActivity {
     private Button signUpBtn;
     private FirebaseAuth mAuth;
     private FirebaseDB firebaseDB;
+    private UserViewModel mUserViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
+        mUserViewModel = new ViewModelProvider(this).get(UserViewModel.class);
         firebaseDB = FirebaseDB.getInstance();
         mAuth = FirebaseAuth.getInstance();
 
@@ -84,6 +89,8 @@ public class SignupActivity extends AppCompatActivity {
                 firebaseDB.signUp(name, email, username, password, mAuth, getApplicationContext(), new FirebaseDB.SignUpCallback() {
                     @Override
                     public void onSignUpSuccess() {
+                        User user1 = new User(mAuth.getCurrentUser().getUid(), email, username, name);
+                        mUserViewModel.insert(user1);
                         Intent intent = new Intent(SignupActivity.this, LoginActivity.class);
                         startActivity(intent);
                         finish();

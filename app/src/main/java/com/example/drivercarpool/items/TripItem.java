@@ -28,6 +28,14 @@ public class TripItem {
         this.users = users;
     }
 
+    public String getTripState() {
+        return tripState;
+    }
+
+    public void setTripState(String tripState) {
+        this.tripState = tripState;
+    }
+
     public String getTripid() {
         return tripid;
     }

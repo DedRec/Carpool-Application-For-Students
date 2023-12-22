@@ -2,6 +2,7 @@ package com.example.drivercarpool.model;
 
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -21,6 +22,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.database.annotations.Nullable;
+
+import java.util.ArrayList;
 
 public class FirebaseDB {
     private FirebaseDatabase database;
@@ -162,6 +165,22 @@ public class FirebaseDB {
         void onDataLoaded(T data);
         void onError(String errorMessage);
     }
+    public void getUser(String userId, DataCallback<Helper> callback) {
+        driverReference.child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    Helper user = snapshot.getValue(Helper.class);
+                    callback.onDataLoaded(user);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                callback.onError(error.getMessage());
+            }
+        });
+    }
     public void getUsername(String uid, DataCallback<String> callback) {
         Query checkDriverDatabase = driverReference.orderByChild("userid").equalTo(uid);
         checkDriverDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -204,17 +223,123 @@ public class FirebaseDB {
     public void updateTripPassengerNumber(String tripId, String passengers){
         tripsReference.child(tripId).child("passengers_number").setValue(passengers);
     }
-    public void updateTripDate(String tripId, String selectedDate){
-        tripsReference.child(tripId).child("date").setValue(selectedDate);
-
+    private void updateOrderState(String orderId, String state) {
+        if (TextUtils.equals(state, "Started")) {
+            updateOrderStateStarted(orderId);
+        } else if (TextUtils.equals(state, "Completed")) {
+            updateOrderStateCompleted(orderId);
+        } else if (TextUtils.equals(state, "Canceled")) {
+            updateOrderStateCanceled(orderId);
+        }
     }
-    public void updateOrderStateAccept(String orderId){
-        orderReference.child(orderId).child("orderState").setValue("Accepted");
+    public void updateOrderStateConfirm(String orderId){
+        orderReference.child(orderId).child("orderState").setValue("Confirmed");
     }
-    public void updateOrderStateDeclined(String orderId){
-        orderReference.child(orderId).child("orderState").setValue("Declined");
+    public void updateOrderStateStarted(String orderId){
+        orderReference.child(orderId).child("orderState").setValue("Started");
+    }
+    public void updateOrderStateCompleted(String orderId){
+        orderReference.child(orderId).child("orderState").setValue("Completed");
+    }
+    public void updateOrderStateCanceled(String orderId){
+        orderReference.child(orderId).child("orderState").setValue("Canceled");
+    }
+    public void updateOrderStateNotConfirmed(String orderId){
+        orderReference.child(orderId).child("orderState").setValue("Not Confirmed");
+    }
+    public void updateTripStateStarted(String tripId){
+        tripsReference.child(tripId).child("tripState").setValue("Started");
+    }
+    public void updateTripStateCompleted(String tripId){
+        tripsReference.child(tripId).child("tripState").setValue("Completed");
+    }
+    public void updateTripStateCanceled(String tripId){
+        tripsReference.child(tripId).child("tripState").setValue("Canceled");
     }
     public void insertTrip(String tripId, HelperTrip trip){
         tripsReference.child(tripId).setValue(trip);
     }
+    public void getTripOrders(String tripId, DataCallback<ArrayList<String>> callback) {
+        Query checkTripDatabase = tripsReference.orderByChild("tripid").equalTo(tripId);
+        checkTripDatabase.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    HelperTrip trip = snapshot.child(tripId).child("").getValue(HelperTrip.class);
+
+                    if (trip != null && trip.getOrders() != null) {
+                        callback.onDataLoaded(new ArrayList<>(trip.getOrders()));
+                    } else {
+                        callback.onError("Orders not found for the trip");
+                    }
+                } else {
+                    callback.onError("Trip not found");
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                callback.onError(error.getMessage());
+            }
+        });
+    }
+    public void updateTripOrders(String tripId, String state){
+        getTripOrders(tripId, new DataCallback<ArrayList<String>>() {
+            @Override
+            public void onDataLoaded(ArrayList<String> data) {
+                for (String orderId : data) {
+                    updateOrderState(orderId,state);
+                }
+            }
+
+            @Override
+            public void onError(String errorMessage) {
+
+            }
+        });
+    }
+    public void checkIfTimeSlotAvailable(String time, String date, String userId, DataCallback<Boolean> callback) {
+        Query checkTripsWithThisTime = tripsReference.orderByChild("time").equalTo(time);
+        checkTripsWithThisTime.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                boolean isTimeSlotAvailable = true;
+
+                for (DataSnapshot tripSnapshot : snapshot.getChildren()) {
+                    HelperTrip trip = tripSnapshot.getValue(HelperTrip.class);
+
+                    if (trip != null && TextUtils.equals(trip.getDriverId(), userId) &&
+                            TextUtils.equals(trip.getDate(), date) &&
+                            TextUtils.equals(trip.getTime(), time) &&
+                            !TextUtils.equals(trip.getTripState(),"Canceled")) {
+                        isTimeSlotAvailable = false;
+                        break;  // No need to continue checking, we found a conflicting time slot
+                    }
+                }
+
+                callback.onDataLoaded(isTimeSlotAvailable);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                callback.onError(databaseError.getMessage());
+            }
+        });
+    }
+    public void updateTripRequestNotConfirmed(String tripId){
+        getTripOrders(tripId, new DataCallback<ArrayList<String>>() {
+            @Override
+            public void onDataLoaded(ArrayList<String> data) {
+                for (String orderId : data) {
+                    updateOrderStateNotConfirmed(orderId);
+                }
+            }
+
+            @Override
+            public void onError(String errorMessage) {
+
+            }
+        });
+    }
+
 }

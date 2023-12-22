@@ -101,10 +101,9 @@ public class HomeFragment extends Fragment {
 
                     TripItem trip = dataSnapshot.getValue(TripItem.class);
                     if(TextUtils.equals(trip.getDriverId(),user.getUid())){
-                        /*if(TextUtils.equals(trip.)){
-
-                        }*/
-                        itemList.add(trip);
+                        if(TextUtils.equals(trip.getTripState(),"Not Started")){
+                            itemList.add(trip);
+                        }
                     }
                 }
                 Collections.sort(itemList, new TimeComparator());
