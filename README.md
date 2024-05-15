@@ -51,5 +51,5 @@ Make sure to include these dependencies in your build.gradle file.
 
 The client side application is located in the main branch. It provides functionalities for users to find and book rides, manage their profile, and interact with other users.
 
-For more information, refer to the README file in the master branch.
+For more information, refer to the README file in the main branch.
 
